@@ -1,26 +1,32 @@
 import Link from 'next/link'
 import navStyles from '../styles/Navbar.module.css'
+import React, {useState} from 'react'
 
 const Navbar = () => {
     return (
         <>
          <nav className={navStyles.nav}>
-             <ul>
-                 <li>
-                    <Link href="/">Home</Link>
-                 </li>
-                 <li>
-                    <Link href="/about">About</Link>
-                 </li>
-                 <li>
-                    <Link href="/profile">Profile</Link>
-                 </li>
-                 <li>
-                    <Link href="/issues">Issues</Link>
-                 </li>
+             <ul className={navStyles.navbar}>
+                 <NavItem link="/dashboard" item="Dashboard"/>
+                 <NavItem link="/about" item="About"/>
+                 <NavItem link="/issues" item="Issues"/>
+                 <NavItem link="/profile" item="Profile" />
+                 
              </ul>
          </nav>   
         </>
+    )
+}
+
+function NavItem(props) {
+    const [open, setOpen] = useState(false)
+    return(
+        <li className={navStyles.navItem}>
+            <Link href={props.link}>
+                {props.item}
+            </Link>
+        </li>
+        
     )
 }
 

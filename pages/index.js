@@ -5,9 +5,9 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Dashboard</title>
+        <title>Home</title>
       </Head>
-      <h1>Dashboard</h1>
+      <h1>Home</h1>
     </div>
   )
 }

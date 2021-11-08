@@ -4,7 +4,7 @@ const issues = () => {
     return (
         <div>
             <Head>
-                <title>Issues Page</title>
+                <title>Issues</title>
             </Head>
             <h1>Issues Page</h1>
         </div>
