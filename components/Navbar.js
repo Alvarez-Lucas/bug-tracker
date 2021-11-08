@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import navStyles from '../styles/Navbar.module.css'
-import React, {useState} from 'react'
 
 const Navbar = () => {
     return (
@@ -19,7 +18,6 @@ const Navbar = () => {
 }
 
 function NavItem(props) {
-    const [open, setOpen] = useState(false)
     return(
         <li className={navStyles.navItem}>
             <Link href={props.link}>
