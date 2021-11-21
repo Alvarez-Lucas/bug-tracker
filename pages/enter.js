@@ -1,31 +1,28 @@
-import {auth, firestore, googleAuthProvider} from '../lib/firebase.js';
-import { UserContext } from '../lib/context.js';
-import { useEffect, useState, useCallback, useContext } from 'react';
-import debounce from 'lodash.debounce';
-
+import { auth, firestore, googleAuthProvider } from "../lib/firebase.js";
+import { UserContext } from "../lib/context.js";
+import { useEffect, useState, useCallback, useContext } from "react";
+import debounce from "lodash.debounce";
 
 export default function Enter(props) {
-  
-  const {user, username} = useContext(UserContext);
-  
-  
+  const { user, username } = useContext(UserContext);
 
   return (
-    <main> 
-      {user ?
-        !username ? <UsernameForm /> : <SignOutButton />
-        :
+    <main>
+      {user ? (
+        !username ? (
+          <UsernameForm />
+        ) : (
+          <SignOutButton />
+        )
+      ) : (
         <SignInButton />
-      }
-      
+      )}
+
       {/* {user ? <SignOutButton /> : <SignInButton />}  
       {user ? console.log("user is here") : console.log("user is not here")} */}
-      
     </main>
-
   );
 }
-
 
 function SignInButton() {
   const signInWithGoogle = async () => {
@@ -40,13 +37,11 @@ function SignInButton() {
 }
 
 function SignOutButton() {
-  return (<button onClick={() => auth.signOut()}>
-    Sign out
-  </button>);
+  return <button onClick={() => auth.signOut()}>Sign out</button>;
 }
 
 function UsernameForm() {
-  const [formValue, setFormValue] = useState('');
+  const [formValue, setFormValue] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +50,6 @@ function UsernameForm() {
   useEffect(() => {
     checkUserName(formValue);
   }, [formValue]);
-
 
   const onChange = (e) => {
     // Force form value typed in form to match correct format
@@ -69,21 +63,20 @@ function UsernameForm() {
       setIsValid(false);
     }
 
-    if (re.test(val)){
+    if (re.test(val)) {
       setFormValue(val);
       setLoading(true);
       setIsValid(false);
     }
-    
-  }
+  };
   // Hit the database for username match after each debounced change
   // useCallback is required for debounce to work
-  const checkUserName = useCallback (
-    debounce( async (username) => {
+  const checkUserName = useCallback(
+    debounce(async (username) => {
       if (username.length >= 3) {
         const ref = firestore.doc(`usernames/${username}`);
-        const {exists} = await ref.get();
-        console.log('firestore read executed');
+        const { exists } = await ref.get();
+        console.log("firestore read executed");
         setIsValid(!exists);
         setLoading(false);
       }
@@ -93,20 +86,22 @@ function UsernameForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    
-  //
-  const userDoc = firestore.doc(`users/${user.uid}`);
-  const usernameDoc = firestore.doc(`usernames/${formValue}`);
 
-  //
-  const batch = firestore.batch();
-  batch.set(userDoc, { username : formValue, photoURL: user.photoURL, displayName: user.displayName});
-  batch.set(usernameDoc, { uid: user.uid })
+    //
+    const userDoc = firestore.doc(`users/${user.uid}`);
+    const usernameDoc = firestore.doc(`usernames/${formValue}`);
 
-  await batch.commit();
+    //
+    const batch = firestore.batch();
+    batch.set(userDoc, {
+      username: formValue,
+      photoURL: user.photoURL,
+      displayName: user.displayName,
+    });
+    batch.set(usernameDoc, { uid: user.uid });
 
+    await batch.commit();
   };
-
 
   function UsernameMessage({ username, isValid, loading }) {
     if (loading) {
@@ -120,17 +115,23 @@ function UsernameForm() {
     }
   }
 
-
-
   return (
     !username && (
       <section>
         <h3>Choose Username</h3>
         <form onSubmit={onSubmit}>
+          <input
+            name="username"
+            placeholder="username"
+            value={formValue}
+            onChange={onChange}
+          />
 
-          <input name="username" placeholder="username" value={formValue} onChange={onChange} />
-
-          <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
+          <UsernameMessage
+            username={formValue}
+            isValid={isValid}
+            loading={loading}
+          />
 
           <button type="submit" className="btn-green" disabled={!isValid}>
             Choose
@@ -143,7 +144,6 @@ function UsernameForm() {
             <br />
             Username Valid: {isValid.toString()}
           </div>
-
         </form>
       </section>
     )
