@@ -1,20 +1,21 @@
 import Head from "next/head";
-import AuthCheck from "../components/AuthCheck";
-import { firestore, auth, serverTimeStamp } from "../lib/firebase";
+import AuthCheck from "../../components/AuthCheck";
+import { firestore, auth, serverTimeStamp } from "../../lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
-import IssueFeed from "../components/IssueFeed";
-import { UserContext } from "../lib/context";
+import TicketFeed from "../../components/TicketFeed";
+import { UserContext } from "../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
-const issues = () => {
+const tickets = () => {
   return (
     <AuthCheck>
       <Head>
-        <title>Issues</title>
+        <title>Tickets Page</title>
       </Head>
 
-      <h1>Issues Page</h1>
+      <h1>Tickets Page</h1>
+
       <TicketList />
       <CreateNewTicket />
     </AuthCheck>
@@ -22,6 +23,18 @@ const issues = () => {
 };
 
 function TicketList() {
+  const [project, setProject] = useState("");
+
+  const projRef = firestore.collection("projects");
+  const [queryProject] = useCollection(projRef);
+
+  var proj = [];
+  queryProject?.docs.forEach(function (doc) {
+    console.log("indi", doc);
+    proj.push(doc.id);
+  });
+
+  console.log("proj", proj);
   const ref = firestore
     .collection("projects")
     .doc("Banana Project")
@@ -29,10 +42,23 @@ function TicketList() {
   const query = ref.orderBy("creationDate");
   const [querySnapshot] = useCollection(query);
 
-  const tickets = querySnapshot?.docs.map((doc) => doc.data());
+  var tickets = [];
+  querySnapshot?.docs.forEach(function (doc) {
+    tickets.push({ data: doc.data(), id: doc.id });
+  });
+
   return (
     <>
-      <IssueFeed tickets={tickets} />
+      <form action="">
+        <select>
+          {proj.map((x) => (
+            <option key={x}>{x}</option>
+          ))}
+        </select>
+        <input type="submit" value="Submit"></input>
+      </form>
+
+      <TicketFeed tickets={tickets} />
     </>
   );
 }
@@ -87,4 +113,4 @@ function CreateNewTicket() {
   );
 }
 
-export default issues;
+export default tickets;
