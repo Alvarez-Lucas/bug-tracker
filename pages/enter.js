@@ -17,9 +17,12 @@ export default function Enter(props) {
         :
         <SignInButton />
       }
-
-      {/* {user ? <SignOutButton /> : <SignInButton />}    */}
+      
+      {/* {user ? <SignOutButton /> : <SignInButton />}  
+      {user ? console.log("user is here") : console.log("user is not here")} */}
+      
     </main>
+
   );
 }
 

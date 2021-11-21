@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   const userData = UseUserData();
 
   return (
-    <UserContext.Provider value={{userData}}>
+    <UserContext.Provider value={userData}>
        <Layout>
         <Component {...pageProps} />
        </Layout>
