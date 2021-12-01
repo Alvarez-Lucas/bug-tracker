@@ -8,7 +8,7 @@ const Navbar = () => {
         <ul className={navStyles.navbar}>
           <NavItem link="/dashboard" item="Dashboard" />
           <NavItem link="/about" item="About" />
-          <NavItem link="/tickets" item="Tickets" />
+          <NavItem link="/projects/tickets" item="Tickets" />
           <NavItem link="/profile" item="Profile" />
         </ul>
       </nav>

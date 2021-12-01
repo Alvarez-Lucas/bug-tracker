@@ -19,7 +19,7 @@ function TicketItem({ ticket }) {
         type="button"
         onClick={() => {
           router.push({
-            pathname: "/tickets/[id]",
+            pathname: "/projects/tickets/[id]",
             query: { id: ticket.id },
           });
         }}

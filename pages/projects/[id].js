@@ -1,11 +1,11 @@
-import TicketView from "../../components/TicketView";
+import TicketView from "../../../components/TicketView";
 import { withRouter, NextRouter, useRouter } from "next/router";
 
 // export const getStaticPaths = async () => {
 //     const res = await fetch
 // }
 
-const TicketDetails = () => {
+const ProjectDetails = () => {
   const router = useRouter();
 
   return (
@@ -17,4 +17,4 @@ const TicketDetails = () => {
   );
 };
 
-export default TicketDetails;
+export default ProjectDetails;

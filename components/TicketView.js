@@ -5,6 +5,8 @@ import {
   useDocument,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
+import { withRouter, NextRouter, useRouter } from "next/router";
+
 const TicketView = () => {
   return (
     <div>
@@ -14,15 +16,16 @@ const TicketView = () => {
 };
 
 function TicketQuery() {
+  const router = useRouter();
+  const ticketID = router.query.id ;
+
   const ref = firestore
     .collection("projects")
-    .doc("kladfjvjkhgbjyhb")
+    .doc("Banana Project")
     .collection("tickets")
-    .doc("ldfksjkladn");
+    .doc(ticketID);
 
   const [querySnapshot] = useDocumentData(ref);
-
-  console.log("query this:", querySnapshot);
 
   return querySnapshot ? <Ticket querySnapshot={querySnapshot} /> : null;
 }

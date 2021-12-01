@@ -1,9 +1,9 @@
 import Head from "next/head";
-import AuthCheck from "../../components/AuthCheck";
-import { firestore, auth, serverTimeStamp } from "../../lib/firebase";
+import AuthCheck from "../../../components/AuthCheck";
+import { firestore, auth, serverTimeStamp } from "../../../lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
-import TicketFeed from "../../components/TicketFeed";
-import { UserContext } from "../../lib/context";
+import TicketFeed from "../../../components/TicketFeed";
+import { UserContext } from "../../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -49,15 +49,6 @@ function TicketList() {
 
   return (
     <>
-      <form action="">
-        <select>
-          {proj.map((x) => (
-            <option key={x}>{x}</option>
-          ))}
-        </select>
-        <input type="submit" value="Submit"></input>
-      </form>
-
       <TicketFeed tickets={tickets} />
     </>
   );
