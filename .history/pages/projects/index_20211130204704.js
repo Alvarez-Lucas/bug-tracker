@@ -1,4 +1,3 @@
-// Page with list of projects
 import Head from "next/head";
 import AuthCheck from "../../components/AuthCheck";
 import { firestore, auth, serverTimeStamp } from "../../lib/firebase";

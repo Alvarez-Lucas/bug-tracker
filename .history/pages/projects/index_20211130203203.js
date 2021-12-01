@@ -1,4 +1,3 @@
-// Page with list of projects
 import Head from "next/head";
 import AuthCheck from "../../components/AuthCheck";
 import { firestore, auth, serverTimeStamp } from "../../lib/firebase";
@@ -7,7 +6,6 @@ import TicketFeed from "../../components/TicketFeed";
 import { UserContext } from "../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
-import ProjectFeed from "../../components/ProjectFeed";
 
 const projects = () => {
   return (
@@ -51,10 +49,9 @@ function ProjectList() {
                 Test{" "}
             </button> */}
 
-      {/* {proj.map((proj) => (
+      {proj.map((proj) => (
         <h1 key={proj}>{proj}</h1>
-      ))} */}
-      <ProjectFeed projects={proj}></ProjectFeed>
+      ))}
     </>
   );
 }

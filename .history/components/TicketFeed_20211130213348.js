@@ -9,7 +9,6 @@ export default function TicketFeed({ tickets }) {
 
 function TicketItem({ ticket }) {
   const router = useRouter();
-  console.log(`router.query`, router.query);
 
   return (
     <>
@@ -20,8 +19,8 @@ function TicketItem({ ticket }) {
         type="button"
         onClick={() => {
           router.push({
-            pathname: "/projects/[projectID]/tickets/[id]",
-            query: { projectID: router.query.projectID, id: ticket.id },
+            pathname: "[projectID]/tickets/[id]",
+            query: { projectID: router.query.productID, id: ticket },
           });
         }}
       >

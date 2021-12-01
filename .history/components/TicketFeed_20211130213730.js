@@ -20,8 +20,8 @@ function TicketItem({ ticket }) {
         type="button"
         onClick={() => {
           router.push({
-            pathname: "/projects/[projectID]/tickets/[id]",
-            query: { projectID: router.query.projectID, id: ticket.id },
+            pathname: "[projectID]/tickets/[id]",
+            query: { projectID: router.query.productID, id: ticket.id },
           });
         }}
       >

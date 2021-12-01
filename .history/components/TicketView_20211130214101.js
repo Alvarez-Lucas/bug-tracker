@@ -23,7 +23,7 @@ function TicketQuery() {
 
   const ref = firestore
     .collection("projects")
-    .doc(projectID)
+    .doc()
     .collection("tickets")
     .doc(ticketID);
 
@@ -43,7 +43,7 @@ function Ticket({ querySnapshot }) {
           <h3>Status: {querySnapshot.status}</h3>
           <h3>Assignee: {querySnapshot.assignee}</h3>
           <h3>priority: {querySnapshot.priority}</h3>
-          <h3>project:{querySnapshot.title}</h3>
+          <h3>project:</h3>
           <h3>reporter: {querySnapshot.reporter}</h3>
           <button onClick={() => setEditMode(true)}>Edit mode</button>
         </div>
