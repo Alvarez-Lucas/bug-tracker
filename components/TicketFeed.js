@@ -9,7 +9,6 @@ export default function TicketFeed({ tickets }) {
 
 function TicketItem({ ticket }) {
   const router = useRouter();
-  console.log(`router.query`, router.query);
 
   return (
     <>
@@ -25,7 +24,7 @@ function TicketItem({ ticket }) {
           });
         }}
       >
-        Test{" "}
+        View{" "}
       </button>
     </>
   );

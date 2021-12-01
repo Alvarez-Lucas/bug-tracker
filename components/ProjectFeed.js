@@ -10,7 +10,6 @@ export default function ProjectFeed({ projects }) {
 function ProjectItem({ project }) {
   const router = useRouter();
 
-  console.log(`project`, project);
   return (
     <>
       <h1>{project}</h1>
@@ -23,7 +22,7 @@ function ProjectItem({ project }) {
           });
         }}
       >
-        Test{" "}
+        View
       </button>
     </>
   );
