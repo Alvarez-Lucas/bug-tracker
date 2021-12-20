@@ -12,7 +12,9 @@ import ProjectFeed from "../../components/ProjectFeed";
 const projects = () => {
   return (
     <div>
-      <ProjectList />
+      <AuthCheck>
+        <ProjectList />
+      </AuthCheck>
     </div>
   );
 };
