@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+//
 export default function TicketFeed({ tickets }) {
   return tickets
-    ? tickets.map((ticket) => <TicketItem ticket={ticket} />)
+    ? tickets.map((ticket) => <TicketItem ticket={ticket} key={ticket.id} />)
     : null;
 }
 
