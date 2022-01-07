@@ -9,21 +9,17 @@ import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import ProjectFeed from "../../components/ProjectFeed";
 
-
-function ProjectList() {
+// Firebase call
+function ProjectQuery() {
   const projRef = firestore.collection("projects");
   const [queryProject] = useCollection(projRef);
 
-  var proj = [];
+  var projects = [];
   queryProject?.docs.forEach(function (doc) {
-    proj.push(doc.id);
+    projects.push(doc.id);
   });
 
-  return (
-    <>
-      <ProjectFeed projects={proj}></ProjectFeed>
-    </>
-  );
+  return projects;
 }
 
 function CreateNewProject() {
@@ -37,6 +33,7 @@ function CreateNewProject() {
     const ref = firestore
       .collection("projects")
       .doc();
+      
     const data = {
       author: user.uid,
       pm,
@@ -66,10 +63,14 @@ function CreateNewProject() {
 }
 
 const projects = () => {
+  // query function, returns call list of projects
+  const projects = ProjectQuery();
+  
+
   return (
     <div>
       <AuthCheck>
-        <ProjectList />
+        <ProjectFeed projects={projects} />
         <CreateNewProject />
       </AuthCheck>
     </div>
