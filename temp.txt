@@ -1,0 +1,16 @@
+install miui check
+
+refactor projects page/componenets
+
+
+user with tickets
+user page -> edit user
+edit tickets
+ticket attatchments
+ticket history
+
+comments for tickets
+
+dashboard
+
+spice up UI

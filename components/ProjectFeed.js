@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 export default function ProjectFeed({ projects }) {
   return projects
-    ? projects.map((project) => <ProjectItem project={project} />)
+    ? projects.map((project) => <ProjectItem project={project} key={project.id}/>)
     : null;
 }
 

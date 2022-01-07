@@ -8,21 +8,6 @@ import { UserContext } from "../../../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
-const tickets = () => {
-  return (
-    <AuthCheck>
-      <Head>
-        <title>Tickets Page</title>
-      </Head>
-
-      <h1>Tickets Page</h1>
-
-      <TicketList />
-      <CreateNewTicket />
-    </AuthCheck>
-  );
-};
-
 function TicketList() {
   const [project, setProject] = useState("");
   const router = useRouter();
@@ -105,5 +90,19 @@ function CreateNewTicket() {
     </form>
   );
 }
+
+const tickets = () => {
+  return (
+    <AuthCheck>
+      <Head>
+        <title>Tickets Page</title>
+      </Head>
+      
+      <h1>Tickets Page</h1>
+      <TicketList />
+      <CreateNewTicket />
+    </AuthCheck>
+  );
+};
 
 export default tickets;
