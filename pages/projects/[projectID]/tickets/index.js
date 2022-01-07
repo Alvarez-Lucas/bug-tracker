@@ -8,8 +8,7 @@ import { UserContext } from "../../../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
-function TicketList() {
-  const [project, setProject] = useState("");
+function TicketQuery() {
   const router = useRouter();
 
   const projectID = router.query.projectID;
@@ -26,11 +25,7 @@ function TicketList() {
     tickets.push({ data: doc.data(), id: doc.id });
   });
 
-  return (
-    <>
-      <TicketFeed tickets={tickets} />
-    </>
-  );
+  return tickets;
 }
 
 function CreateNewTicket() {
@@ -92,14 +87,16 @@ function CreateNewTicket() {
 }
 
 const tickets = () => {
+  const tickets = TicketQuery();
+
   return (
     <AuthCheck>
       <Head>
         <title>Tickets Page</title>
       </Head>
-      
+
       <h1>Tickets Page</h1>
-      <TicketList />
+      <TicketFeed tickets={tickets} />
       <CreateNewTicket />
     </AuthCheck>
   );
