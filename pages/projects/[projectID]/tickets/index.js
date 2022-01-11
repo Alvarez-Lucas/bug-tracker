@@ -7,6 +7,15 @@ import TicketFeed from "../../../../components/TicketFeed";
 import { UserContext } from "../../../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
+import {
+  Button,
+  Card,
+  CssBaseline,
+  Stack,
+  Box,
+  Input,
+  Typography,
+} from "@mui/material";
 
 function TicketQuery() {
   const router = useRouter();
@@ -65,24 +74,36 @@ function CreateNewTicket() {
   };
 
   return (
-    <form onSubmit={createTicket}>
+    // <form onSubmit={createTicket}>
+    <Box
+      component="form"
+      sx={{
+        "& > :not(style)": { m: 1 },
+      }}
+      noValidate
+      autoComplete="off"
+      onSubmit={createTicket}
+    >
       Assignee
-      <input value={assignee} onChange={(e) => setAssignee(e.target.value)} />
+      <Input value={assignee} onChange={(e) => setAssignee(e.target.value)} />
       Description
-      <input
+      <Input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       Priority
-      <input value={priority} onChange={(e) => setPriority(e.target.value)} />
+      <Input value={priority} onChange={(e) => setPriority(e.target.value)} />
       Reporter
-      <input value={reporter} onChange={(e) => setReporter(e.target.value)} />
+      <Input value={reporter} onChange={(e) => setReporter(e.target.value)} />
       Status
-      <input value={status} onChange={(e) => setStatus(e.target.value)} />
+      <Input value={status} onChange={(e) => setStatus(e.target.value)} />
       Title
-      <input value={title} onChange={(e) => setTitle(e.target.value)} />
-      <button type="submit">Create New Post</button>
-    </form>
+      <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+      <Button variant="contained" type="submit">
+        Create New Post
+      </Button>
+    </Box>
+    // </form>
   );
 }
 
@@ -95,7 +116,7 @@ const tickets = () => {
         <title>Tickets Page</title>
       </Head>
 
-      <h1>Tickets Page</h1>
+      <Typography variant="h3">Tickets Page</Typography>
       <TicketFeed tickets={tickets} />
       <CreateNewTicket />
     </AuthCheck>

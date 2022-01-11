@@ -7,6 +7,8 @@ import {
 } from "react-firebase-hooks/firestore";
 import { withRouter, NextRouter, useRouter } from "next/router";
 import { UserContext } from "../lib/context";
+import { Typography, Button, Container, Chip } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 
 // input field and post for user comments
 export default function CommentField() {
@@ -15,7 +17,6 @@ export default function CommentField() {
   const projectID = router.query.projectID;
   const ticketID = router.query.id;
   const { user } = useContext(UserContext);
-  console.log(`user`, user);
 
   const createComment = async (e) => {
     e.preventDefault();
@@ -40,7 +41,9 @@ export default function CommentField() {
     <form onSubmit={createComment}>
       <h1>Comment</h1>
       <input value={comment} onChange={(e) => setComment(e.target.value)} />
-      <button type="submit">Create New Comment</button>
+      <Button variant="contained" endIcon={<SendIcon />} type="submit">
+        Create New Comment
+      </Button>
     </form>
   );
 }

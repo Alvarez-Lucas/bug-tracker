@@ -1,6 +1,6 @@
 install miui check
 
-refactor projects page/componenets
+refactor projects page/componenets check
 
 
 user with tickets
@@ -9,8 +9,8 @@ edit tickets
 ticket attatchments
 ticket history
 
-comments for tickets
+comments for tickets check
 
 dashboard
 
-spice up UI
+spice up UI in progress

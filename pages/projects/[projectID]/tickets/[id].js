@@ -9,6 +9,9 @@ import {
   useDocument,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
+import { Breadcrumbs } from "@mui/material";
+import Link from "next/link";
+import { Typography } from "@mui/material";
 
 // Firebase call for ticket data
 function TicketQuery(ref) {
@@ -35,6 +38,10 @@ function CommentQuery(ref) {
   return comments;
 }
 
+function TicketNameQuery() {
+  return;
+}
+
 const TicketDetails = () => {
   const router = useRouter();
   const ticketID = router.query.id;
@@ -48,10 +55,25 @@ const TicketDetails = () => {
 
   const ticketData = TicketQuery(ref);
   const commentData = CommentQuery(ref);
+  const ticketName = TicketNameQuery();
+  // console.log(`ticketData`, ticketData);
 
   return (
     <div>
-      <h1>Ticket Details</h1>
+      {/* Breadcrumbs ? */}
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link underline="hover" color="inherit" href="/">
+          MUI
+        </Link>
+        <Link
+          underline="hover"
+          color="inherit"
+          href="/getting-started/installation/"
+        >
+          Core
+        </Link>
+        <Typography color="text.primary">Breadcrumbs</Typography>
+      </Breadcrumbs>
       <TicketView ticketData={ticketData} />
       <CommentFeed commentData={commentData} />
       <CommentField />

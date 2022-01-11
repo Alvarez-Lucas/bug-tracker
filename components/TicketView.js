@@ -7,6 +7,7 @@ import {
 } from "react-firebase-hooks/firestore";
 import { withRouter, NextRouter, useRouter } from "next/router";
 import { UserContext } from "../lib/context";
+import { Typography, Button, Container, Chip } from "@mui/material";
 
 // Individual Ticket Card
 export default function TicketView({ ticketData }) {
@@ -16,22 +17,33 @@ export default function TicketView({ ticketData }) {
     <>
       {!editMode ? (
         ticketData && (
-          <div>
-            <h3>description: {ticketData.description}</h3>
-            <h3>Status: {ticketData.status}</h3>
-            <h3>Assignee: {ticketData.assignee}</h3>
-            <h3>priority: {ticketData.priority}</h3>
-            <h3>project:{ticketData.title}</h3>
-            <h3>reporter: {ticketData.reporter}</h3>
-            <button onClick={() => setEditMode(true)}>Edit mode</button>
-            comments below here
-          </div>
+          <Container>
+            <Typography variant="h3">
+              {ticketData.title} <Chip label={ticketData.status} />
+            </Typography>{" "}
+            <Typography variant="h4">Description</Typography>
+            <Typography variant="body1">{ticketData.description}</Typography>
+            <Typography variant="h4">
+              Assignee: {ticketData.assignee}
+            </Typography>
+            <Typography variant="h4">
+              priority: {ticketData.priority}
+            </Typography>
+            <Typography variant="h4">
+              reporter: {ticketData.reporter}
+            </Typography>
+            <Button variant="outlined" onClick={() => setEditMode(true)}>
+              Edit mode
+            </Button>
+          </Container>
         )
       ) : (
         <div>
           <h1> edit mode </h1>
 
-          <button onClick={() => setEditMode(false)}>View mode</button>
+          <Button varient="contained" onClick={() => setEditMode(false)}>
+            View mode
+          </Button>
         </div>
       )}
     </>
