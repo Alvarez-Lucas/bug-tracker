@@ -7,7 +7,7 @@ import {
 } from "react-firebase-hooks/firestore";
 import { withRouter, NextRouter, useRouter } from "next/router";
 import { UserContext } from "../lib/context";
-import { Typography, Button, Container, Chip } from "@mui/material";
+import { Typography, Button, Container, Chip, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 
 // input field and post for user comments

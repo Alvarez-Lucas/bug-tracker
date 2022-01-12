@@ -7,7 +7,22 @@ import {
 } from "react-firebase-hooks/firestore";
 import { withRouter, NextRouter, useRouter } from "next/router";
 import { UserContext } from "../lib/context";
-import { Typography, Button, Container, Chip } from "@mui/material";
+import {
+  Typography,
+  Button,
+  Grid,
+  Chip,
+  Stack,
+  Container,
+} from "@mui/material";
+import { Grid3x3Sharp } from "@mui/icons-material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import { AccountCircle, AccountCircleOutline } from "mdi-material-ui";
+import { typography } from "@mui/system";
 
 // Individual Ticket Card
 export default function TicketView({ ticketData }) {
@@ -17,25 +32,76 @@ export default function TicketView({ ticketData }) {
     <>
       {!editMode ? (
         ticketData && (
-          <Container>
-            <Typography variant="h3">
-              {ticketData.title} <Chip label={ticketData.status} />
-            </Typography>{" "}
-            <Typography variant="h4">Description</Typography>
-            <Typography variant="body1">{ticketData.description}</Typography>
-            <Typography variant="h4">
-              Assignee: {ticketData.assignee}
-            </Typography>
-            <Typography variant="h4">
-              priority: {ticketData.priority}
-            </Typography>
-            <Typography variant="h4">
-              reporter: {ticketData.reporter}
-            </Typography>
-            <Button variant="outlined" onClick={() => setEditMode(true)}>
-              Edit mode
-            </Button>
-          </Container>
+          <Grid container>
+            <Grid item bgcolor={"yellow"} xs={12} md={12}>
+              <Typography variant="h3">{ticketData.title}</Typography>{" "}
+            </Grid>
+            <Grid
+              item
+              bgcolor={"green"}
+              xs={12}
+              md={9}
+              paddingTop={5}
+              paddingRight={30}
+            >
+              <Typography variant="body1">{ticketData.description}</Typography>
+            </Grid>
+
+            <Grid
+              item
+              container
+              direction="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              bgcolor={"blue"}
+              xs={12}
+              md={3}
+            >
+              <typography>This is a test</typography>
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "red",
+                }}
+              >
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <AccountCircle />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Assignee"
+                    secondary={ticketData.assignee}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <AccountCircleOutline />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Reporter"
+                    secondary={ticketData.reporter}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Priority"
+                    secondary={ticketData.priority}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Status"
+                    secondary={ticketData.status}
+                  />
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
         )
       ) : (
         <div>

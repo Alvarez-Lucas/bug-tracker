@@ -9,9 +9,10 @@ import {
   useDocument,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
-import { Breadcrumbs } from "@mui/material";
+import { Breadcrumbs, Container } from "@mui/material";
 import Link from "next/link";
 import { Typography } from "@mui/material";
+import TicketGarlicBread from "../../../../components/TicketGarlicBread";
 
 // Firebase call for ticket data
 function TicketQuery(ref) {
@@ -33,13 +34,15 @@ function CommentQuery(ref) {
     comments.push({ data: doc.data(), id: doc.id });
   });
 
-  console.log(`comments`, comments);
-
   return comments;
 }
 
-function TicketNameQuery() {
-  return;
+function ProjectNameQuery(projectID) {
+  const ref = firestore.collection("projects").doc(projectID);
+
+  const [projectData] = useDocumentData(ref);
+
+  return projectData ? projectData.title : " ";
 }
 
 const TicketDetails = () => {
@@ -55,29 +58,19 @@ const TicketDetails = () => {
 
   const ticketData = TicketQuery(ref);
   const commentData = CommentQuery(ref);
-  const ticketName = TicketNameQuery();
+  const projectName = ProjectNameQuery(projectID);
   // console.log(`ticketData`, ticketData);
-
+  // projects #1 / ticket #1
   return (
-    <div>
+    <Container maxWidth="xl">
       {/* Breadcrumbs ? */}
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          MUI
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="/getting-started/installation/"
-        >
-          Core
-        </Link>
-        <Typography color="text.primary">Breadcrumbs</Typography>
-      </Breadcrumbs>
+      <TicketGarlicBread
+        data={{ ticketData, projectName, projectID, ticketID }}
+      />
       <TicketView ticketData={ticketData} />
       <CommentFeed commentData={commentData} />
       <CommentField />
-    </div>
+    </Container>
   );
 };
 
