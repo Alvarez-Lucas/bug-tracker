@@ -23,6 +23,9 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { AccountCircle, AccountCircleOutline } from "mdi-material-ui";
 import { typography } from "@mui/system";
+import LowPriorityIcon from "@mui/icons-material/LowPriority";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 // Individual Ticket Card
 export default function TicketView({ ticketData }) {
@@ -33,36 +36,34 @@ export default function TicketView({ ticketData }) {
       {!editMode ? (
         ticketData && (
           <Grid container>
-            <Grid item bgcolor={"yellow"} xs={12} md={12}>
+            <Grid item xs={12} md={12}>
               <Typography variant="h3">{ticketData.title}</Typography>{" "}
             </Grid>
             <Grid
               item
-              bgcolor={"green"}
+              // bgcolor={"green"}
               xs={12}
               md={9}
               paddingTop={5}
-              paddingRight={30}
+              paddingRight={15}
             >
               <Typography variant="body1">{ticketData.description}</Typography>
             </Grid>
 
             <Grid
               item
-              container
-              direction="row"
               alignItems="center"
               justifyContent="flex-end"
-              bgcolor={"blue"}
+              // bgcolor={"blue"}
               xs={12}
               md={3}
             >
-              <typography>This is a test</typography>
+              {/* <typography>This is a test</typography> */}
               <List
                 sx={{
                   width: "100%",
                   maxWidth: 360,
-                  bgcolor: "red",
+                  // bgcolor: "red",
                 }}
               >
                 <ListItem>
@@ -82,18 +83,34 @@ export default function TicketView({ ticketData }) {
                       <AccountCircleOutline />
                     </Avatar>
                   </ListItemAvatar>
+
                   <ListItemText
                     primary="Reporter"
                     secondary={ticketData.reporter}
                   />
                 </ListItem>
                 <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      {ticketData.priority == "High" ? (
+                        <PriorityHighIcon />
+                      ) : (
+                        <LowPriorityIcon />
+                      )}
+                    </Avatar>
+                  </ListItemAvatar>
                   <ListItemText
                     primary="Priority"
                     secondary={ticketData.priority}
                   />
                 </ListItem>
                 <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <QuestionMarkIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+
                   <ListItemText
                     primary="Status"
                     secondary={ticketData.status}

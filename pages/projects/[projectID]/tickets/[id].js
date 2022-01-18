@@ -1,6 +1,7 @@
 // specific ticket under specific project
 import TicketView from "../../../../components/TicketView";
 import CommentFeed from "../../../../components/CommentFeed";
+import EditTicket from "../../../../components/EditTicket";
 import { withRouter, NextRouter, useRouter } from "next/router";
 import { firestore, auth, serverTimeStamp } from "../../../../lib/firebase";
 import CommentField from "../../../../components/CommentField";
@@ -13,15 +14,28 @@ import { Breadcrumbs, Container } from "@mui/material";
 import Link from "next/link";
 import { Typography } from "@mui/material";
 import TicketGarlicBread from "../../../../components/TicketGarlicBread";
+import { useContext, useState } from "react";
 
 // Firebase call for ticket data
-function TicketQuery(ref) {
+async function TicketQuery(ref) {
   const router = useRouter();
 
-  const [ticketData] = useDocumentData(ref);
+  const [ticketData] = await useDocumentData(ref);
 
-  return ticketData;
+  // THIS PART IS BROKEN, AWAITING FOR TICKETDATA
+  const newRef = await firestore.collection("users").doc(ticketData.assignee);
+  const [userData] = useDocumentData(newRef);
+  console.log(`userData`, userData);
+
+  return ticketData, userData;
 }
+
+// async function UsernameQuery(uid) {
+//   const ref = await firestore.collection("users").doc(uid.assignee);
+//   const [userData] = useDocumentData(ref);
+//   console.log(`userData`, userData);
+//   return userData ? userData : " ";
+// }
 
 // Firebase call for comments
 function CommentQuery(ref) {
@@ -46,6 +60,7 @@ function ProjectNameQuery(projectID) {
 }
 
 const TicketDetails = () => {
+  const [editMode, setEditMode] = useState(false);
   const router = useRouter();
   const ticketID = router.query.id;
   const projectID = router.query.projectID;
@@ -59,17 +74,21 @@ const TicketDetails = () => {
   const ticketData = TicketQuery(ref);
   const commentData = CommentQuery(ref);
   const projectName = ProjectNameQuery(projectID);
-  // console.log(`ticketData`, ticketData);
+  // const userData = UsernameQuery(ticketData.assignee);
+  // ticketData ? UsernameQuery(ticketData.assignee) : console.log(`loading`);
+
+  // const userData = UsernameQuery(ticketData);
+  // console.log(`ticketData`, ticketData.assignee);
   // projects #1 / ticket #1
   return (
     <Container maxWidth="xl">
-      {/* Breadcrumbs ? */}
       <TicketGarlicBread
         data={{ ticketData, projectName, projectID, ticketID }}
       />
       <TicketView ticketData={ticketData} />
-      <CommentFeed commentData={commentData} />
+      <EditTicket ticketData={ticketData} />
       <CommentField />
+      <CommentFeed commentData={commentData} />
     </Container>
   );
 };
