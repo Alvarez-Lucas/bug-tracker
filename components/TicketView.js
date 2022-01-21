@@ -28,7 +28,7 @@ import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 // Individual Ticket Card
-export default function TicketView({ ticketData }) {
+export default function TicketView({ ticketData, assignee }) {
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -72,10 +72,7 @@ export default function TicketView({ ticketData }) {
                       <AccountCircle />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary="Assignee"
-                    secondary={ticketData.assignee}
-                  />
+                  <ListItemText primary="Assignee" secondary={assignee} />
                 </ListItem>
                 <ListItem>
                   <ListItemAvatar>

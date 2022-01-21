@@ -24,20 +24,35 @@ function ProjectItem({ project }) {
 
   return (
     <Item>
-      <CssBaseline />
-      <Typography variant="h6">{project.data.title}</Typography>
-      <Button
-        variant="outlined"
-        type="button"
-        onClick={() => {
-          router.push({
-            pathname: "/projects/[id]/tickets",
-            query: { id: project.id },
-          });
-        }}
-      >
-        View
-      </Button>
+      <ul>
+        <li>
+          <Link
+            href={{
+              pathname: `/projects/${project.id}/tickets`,
+              query: project.data,
+            }}
+            as={`/projects/${project.id}/tickets`}
+          >
+            {project.data.title}
+          </Link>
+        </li>
+      </ul>
     </Item>
+    // <Item>
+    //   <CssBaseline />
+    //   <Typography variant="h6">{project.data.title}</Typography>
+    //   <Button
+    //     variant="outlined"
+    //     type="button"
+    //     onClick={() => {
+    //       router.push({
+    //         pathname: "/projects/[id]/tickets",
+    //         query: { id: project.id },
+    //       });
+    //     }}
+    //   >
+    //     View
+    //   </Button>
+    // </Item>
   );
 }
