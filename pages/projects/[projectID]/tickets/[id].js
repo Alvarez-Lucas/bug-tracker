@@ -46,6 +46,8 @@ function ProjectNameQuery(projectID) {
 }
 
 const TicketDetails = () => {
+  // Proof of concept
+  // async await in use effect
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
   const ticketID = router.query.id;
@@ -53,60 +55,49 @@ const TicketDetails = () => {
 
   // Proof of concept
   // store fetched data into states
-  const [testTicketData, setTestTicketData] = useState();
-  const [testUserData, setTestUserData] = useState();
+  const [ticketData, setTicketData] = useState();
+  const [assigneeUserData, setAssigneeUserData] = useState();
+  const [reporterUserData, setReporterUserData] = useState();
+  const ref = firestore.doc(`/projects/${projectID}/tickets/${ticketID}`);
 
-  // Proof of concept
-  // async await in use effect
   useEffect(() => {
     async function fetchData() {
-      // Tickets
-      const ticketRef = firestore.doc(
-        "/projects/XsnuP6atBad2HJcU8ooX/tickets/sVese45Im13jT60Nxfsf"
-      );
-      const localTicketData = await ticketRef.get();
+      try {
+        const localTicketData = await ref.get();
 
-      // Users
-      const userRef = firestore.doc(
-        `/users/${localTicketData.data().assignee}`
-      );
-      const localUserData = await userRef.get();
+        const assigneeRef = firestore.doc(
+          `/users/${localTicketData.data().assignee}`
+        );
+        const reporterRef = firestore.doc(
+          `/users/${localTicketData.data().reporter}`
+        );
 
-      // Update States
-      setTestTicketData(localTicketData.data());
-      setTestUserData(localUserData.data());
+        const assigneeUser = await assigneeRef.get();
+        const reporterUser = await reporterRef.get();
+
+        setTicketData(localTicketData.data());
+
+        setAssigneeUserData(assigneeUser.data());
+        setReporterUserData(reporterUser.data());
+      } catch (e) {}
     }
     fetchData();
-  }, []); // call once
+  }, [projectID, ticketID]); // call once
 
-  //could have another use effect that monitors the undefined value shit?
-
-  const ref = firestore
-    .collection("projects")
-    .doc(projectID)
-    .collection("tickets")
-    .doc(ticketID);
-
-  const ticketData = TicketQuery(ref);
+  // const ticketData = TicketQuery(ref);
   const commentData = CommentQuery(ref);
   const projectName = ProjectNameQuery(projectID);
 
   return (
     <Container maxWidth="xl">
-      {testTicketData ? (
-        <h1>Loaded {testTicketData.assignee}</h1>
-      ) : (
-        <h1>not loaded</h1>
-      )}
-      {testUserData ? (
-        <h1>Loaded {testUserData.username}</h1>
-      ) : (
-        <h1>not loaded</h1>
-      )}
       <TicketGarlicBread
         data={{ ticketData, projectName, projectID, ticketID }}
       />
-      <TicketView ticketData={ticketData} />
+      <TicketView
+        ticketData={ticketData}
+        assigneeUserData={assigneeUserData}
+        reporterUserData={reporterUserData}
+      />
       <EditTicket ticketData={ticketData} />
       <CommentField />
       <CommentFeed commentData={commentData} />

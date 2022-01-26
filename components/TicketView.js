@@ -28,13 +28,19 @@ import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 // Individual Ticket Card
-export default function TicketView({ ticketData }) {
+export default function TicketView({
+  ticketData,
+  assigneeUserData,
+  reporterUserData,
+}) {
   const [editMode, setEditMode] = useState(false);
 
   return (
     <>
       {!editMode ? (
-        ticketData && (
+        ticketData &&
+        assigneeUserData &&
+        reporterUserData && (
           <Grid container>
             <Grid item xs={12} md={12}>
               <Typography variant="h3">{ticketData.title}</Typography>{" "}
@@ -69,24 +75,24 @@ export default function TicketView({ ticketData }) {
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
-                      <AccountCircle />
+                      <img src={assigneeUserData.photoURL} />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
                     primary="Assignee"
-                    secondary={ticketData.assignee}
+                    secondary={assigneeUserData.displayName}
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
-                      <AccountCircleOutline />
+                      <img src={reporterUserData.photoURL} />
                     </Avatar>
                   </ListItemAvatar>
 
                   <ListItemText
                     primary="Reporter"
-                    secondary={ticketData.reporter}
+                    secondary={reporterUserData.displayName}
                   />
                 </ListItem>
                 <ListItem>
