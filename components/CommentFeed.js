@@ -43,7 +43,7 @@ function CommentItem({ comment }) {
         <ListItemText
           primary={
             userDoc &&
-            comment && (
+            comment.data.creationDate && (
               <>
                 {userDoc.displayName}{" "}
                 <Typography variant="body2" mt={0}>
