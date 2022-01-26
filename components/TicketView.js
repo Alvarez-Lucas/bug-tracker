@@ -49,7 +49,7 @@ export default function TicketView({
               item
               // bgcolor={"green"}
               xs={12}
-              md={9}
+              md={10}
               paddingTop={5}
               paddingRight={15}
             >
@@ -62,7 +62,7 @@ export default function TicketView({
               justifyContent="flex-end"
               // bgcolor={"blue"}
               xs={12}
-              md={3}
+              md={2}
             >
               {/* <typography>This is a test</typography> */}
               <List
