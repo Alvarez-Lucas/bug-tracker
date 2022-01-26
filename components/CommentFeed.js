@@ -24,7 +24,7 @@ function CommentItem({ comment }) {
 
   const [userDoc] = useDocumentData(ref);
 
-  console.log(`username`, userDoc);
+  // console.log(`username`, userDoc);
   return (
     <>
       <p>{comment.data.comment}</p>

@@ -14,28 +14,14 @@ import { Breadcrumbs, Container } from "@mui/material";
 import Link from "next/link";
 import { Typography } from "@mui/material";
 import TicketGarlicBread from "../../../../components/TicketGarlicBread";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { GetTicketDataAndUsername } from "../../../../lib/hooks";
 
 // Firebase call for ticket data
-async function TicketQuery(ref) {
-  const router = useRouter();
-
-  const [ticketData] = await useDocumentData(ref);
-
-  // THIS PART IS BROKEN, AWAITING FOR TICKETDATA
-  const newRef = await firestore.collection("users").doc(ticketData.assignee);
-  const [userData] = useDocumentData(newRef);
-  console.log(`userData`, userData);
-
-  return ticketData, userData;
+function TicketQuery(ref) {
+  const [ticketData] = useDocumentData(ref);
+  return ticketData;
 }
-
-// async function UsernameQuery(uid) {
-//   const ref = await firestore.collection("users").doc(uid.assignee);
-//   const [userData] = useDocumentData(ref);
-//   console.log(`userData`, userData);
-//   return userData ? userData : " ";
-// }
 
 // Firebase call for comments
 function CommentQuery(ref) {
@@ -65,6 +51,36 @@ const TicketDetails = () => {
   const ticketID = router.query.id;
   const projectID = router.query.projectID;
 
+  // Proof of concept
+  // store fetched data into states
+  const [testTicketData, setTestTicketData] = useState();
+  const [testUserData, setTestUserData] = useState();
+
+  // Proof of concept
+  // async await in use effect
+  useEffect(() => {
+    async function fetchData() {
+      // Tickets
+      const ticketRef = firestore.doc(
+        "/projects/XsnuP6atBad2HJcU8ooX/tickets/sVese45Im13jT60Nxfsf"
+      );
+      const localTicketData = await ticketRef.get();
+
+      // Users
+      const userRef = firestore.doc(
+        `/users/${localTicketData.data().assignee}`
+      );
+      const localUserData = await userRef.get();
+
+      // Update States
+      setTestTicketData(localTicketData.data());
+      setTestUserData(localUserData.data());
+    }
+    fetchData();
+  }, []); // call once
+
+  //could have another use effect that monitors the undefined value shit?
+
   const ref = firestore
     .collection("projects")
     .doc(projectID)
@@ -74,14 +90,19 @@ const TicketDetails = () => {
   const ticketData = TicketQuery(ref);
   const commentData = CommentQuery(ref);
   const projectName = ProjectNameQuery(projectID);
-  // const userData = UsernameQuery(ticketData.assignee);
-  // ticketData ? UsernameQuery(ticketData.assignee) : console.log(`loading`);
 
-  // const userData = UsernameQuery(ticketData);
-  // console.log(`ticketData`, ticketData.assignee);
-  // projects #1 / ticket #1
   return (
     <Container maxWidth="xl">
+      {testTicketData ? (
+        <h1>Loaded {testTicketData.assignee}</h1>
+      ) : (
+        <h1>not loaded</h1>
+      )}
+      {testUserData ? (
+        <h1>Loaded {testUserData.username}</h1>
+      ) : (
+        <h1>not loaded</h1>
+      )}
       <TicketGarlicBread
         data={{ ticketData, projectName, projectID, ticketID }}
       />
