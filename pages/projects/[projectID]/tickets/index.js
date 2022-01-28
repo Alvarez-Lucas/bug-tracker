@@ -7,6 +7,7 @@ import TicketFeed from "../../../../components/TicketFeed";
 import { UserContext } from "../../../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
+import CreateTicket from "../../../../components/CreateTicket";
 import {
   Button,
   Card,
@@ -119,6 +120,7 @@ const tickets = () => {
       <Typography variant="h3">Tickets Page</Typography>
       <TicketFeed tickets={tickets} />
       <CreateNewTicket />
+      <CreateTicket />
     </AuthCheck>
   );
 };

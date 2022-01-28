@@ -91,7 +91,7 @@ const projects = () => {
   return (
     <div>
       <AuthCheck>
-        <Typography variant="h3" align="center" gutterBottom="true">
+        <Typography variant="h3" align="center" gutterBottom={true}>
           Projects
         </Typography>
         <Stack spacing={3}>
