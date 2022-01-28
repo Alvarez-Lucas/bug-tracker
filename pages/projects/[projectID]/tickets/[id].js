@@ -25,7 +25,9 @@ function TicketQuery(ref) {
 
 // Firebase call for comments
 function CommentQuery(ref) {
-  const commentQuery = ref.collection("comments").orderBy("creationDate");
+  const commentQuery = ref
+    .collection("comments")
+    .orderBy("creationDate", "desc");
 
   const [commentData] = useCollection(commentQuery);
 
