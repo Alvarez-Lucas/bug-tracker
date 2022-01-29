@@ -38,75 +38,75 @@ function TicketQuery() {
   return tickets;
 }
 
-function CreateNewTicket() {
-  const router = useRouter();
-  const { username } = useContext(UserContext);
-  const [assignee, setAssignee] = useState("");
-  const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("");
-  const [reporter, setReporter] = useState("");
-  const [status, setStatus] = useState("");
-  const [title, setTitle] = useState("");
-  const [project, setProject] = useState("");
+// function CreateNewTicket() {
+//   const router = useRouter();
+//   const { username } = useContext(UserContext);
+//   const [assignee, setAssignee] = useState("");
+//   const [description, setDescription] = useState("");
+//   const [priority, setPriority] = useState("");
+//   const [reporter, setReporter] = useState("");
+//   const [status, setStatus] = useState("");
+//   const [title, setTitle] = useState("");
+//   const [project, setProject] = useState("");
 
-  const projectID = router.query.projectID;
+//   const projectID = router.query.projectID;
 
-  const createTicket = async (e) => {
-    e.preventDefault();
-    // const uid = auth.currentUser.uid;
-    const ref = firestore
-      .collection("projects")
-      .doc(projectID)
-      .collection("tickets")
-      .doc();
+//   const createTicket = async (e) => {
+//     e.preventDefault();
+//     // const uid = auth.currentUser.uid;
+//     const ref = firestore
+//       .collection("projects")
+//       .doc(projectID)
+//       .collection("tickets")
+//       .doc();
 
-    const data = {
-      assignee,
-      creationDate: serverTimeStamp(),
-      description,
-      lastUpdated: serverTimeStamp(),
-      priority,
-      reporter,
-      status,
-      title,
-    };
+//     const data = {
+//       assignee,
+//       creationDate: serverTimeStamp(),
+//       description,
+//       lastUpdated: serverTimeStamp(),
+//       priority,
+//       reporter,
+//       status,
+//       title,
+//     };
 
-    await ref.set(data);
-  };
+//     await ref.set(data);
+//   };
 
-  return (
-    // <form onSubmit={createTicket}>
-    <Box
-      component="form"
-      sx={{
-        "& > :not(style)": { m: 1 },
-      }}
-      noValidate
-      autoComplete="off"
-      onSubmit={createTicket}
-    >
-      Assignee
-      <Input value={assignee} onChange={(e) => setAssignee(e.target.value)} />
-      Description
-      <Input
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      Priority
-      <Input value={priority} onChange={(e) => setPriority(e.target.value)} />
-      Reporter
-      <Input value={reporter} onChange={(e) => setReporter(e.target.value)} />
-      Status
-      <Input value={status} onChange={(e) => setStatus(e.target.value)} />
-      Title
-      <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-      <Button variant="contained" type="submit">
-        Create New Post
-      </Button>
-    </Box>
-    // </form>
-  );
-}
+//   return (
+//     // <form onSubmit={createTicket}>
+//     <Box
+//       component="form"
+//       sx={{
+//         "& > :not(style)": { m: 1 },
+//       }}
+//       noValidate
+//       autoComplete="off"
+//       onSubmit={createTicket}
+//     >
+//       Assignee
+//       <Input value={assignee} onChange={(e) => setAssignee(e.target.value)} />
+//       Description
+//       <Input
+//         value={description}
+//         onChange={(e) => setDescription(e.target.value)}
+//       />
+//       Priority
+//       <Input value={priority} onChange={(e) => setPriority(e.target.value)} />
+//       Reporter
+//       <Input value={reporter} onChange={(e) => setReporter(e.target.value)} />
+//       Status
+//       <Input value={status} onChange={(e) => setStatus(e.target.value)} />
+//       Title
+//       <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+//       <Button variant="contained" type="submit">
+//         Create New Post
+//       </Button>
+//     </Box>
+//     // </form>
+//   );
+// }
 
 const tickets = () => {
   const tickets = TicketQuery();
@@ -118,8 +118,10 @@ const tickets = () => {
       </Head>
 
       <Typography variant="h3">Tickets Page</Typography>
-      <TicketFeed tickets={tickets} />
-      <CreateNewTicket />
+      <Stack spacing={3}>
+        <TicketFeed tickets={tickets} />
+      </Stack>
+      {/* <CreateNewTicket /> */}
       <CreateTicket />
     </AuthCheck>
   );

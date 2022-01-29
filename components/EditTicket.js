@@ -120,6 +120,7 @@ export default function EditTicket({ ticketData }) {
                 label="Title"
                 fullWidth
                 variant="standard"
+                defaultValue={ticketData.title}
                 onChange={(e) => setTitle(e.target.value)}
               />
               <TextField

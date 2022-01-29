@@ -16,7 +16,7 @@ import { Typography } from "@mui/material";
 import TicketGarlicBread from "../../../../components/TicketGarlicBread";
 import { useContext, useEffect, useState } from "react";
 import { GetTicketDataAndUsername } from "../../../../lib/hooks";
-
+import CircularProgress from "@mui/material/CircularProgress";
 // Firebase call for ticket data
 function TicketQuery(ref) {
   const [ticketData] = useDocumentData(ref);
