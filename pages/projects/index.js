@@ -16,6 +16,8 @@ import {
   Box,
   Input,
   Typography,
+  Container,
+  Grid,
 } from "@mui/material";
 
 // Firebase call to Projects collection
@@ -89,17 +91,20 @@ const projects = () => {
   const projectData = ProjectQuery();
 
   return (
-    <div>
+    <Container maxWidth="xl">
       <AuthCheck>
         <Typography variant="h3" align="center" gutterBottom={true}>
           Projects
         </Typography>
-        <Stack spacing={3}>
+        <Grid container spacing={2}>
+          {/* <Stack spacing={3}> */}
           <ProjectFeed projects={projectData} />
-        </Stack>
-        <CreateNewProject />
+          {/* </Stack> */}
+
+          <CreateNewProject />
+        </Grid>
       </AuthCheck>
-    </div>
+    </Container>
   );
 };
 

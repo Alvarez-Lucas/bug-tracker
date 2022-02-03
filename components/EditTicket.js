@@ -1,5 +1,5 @@
 import { firestore, auth, serverTimeStamp } from "../lib/firebase";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   useCollection,
   useDocument,
@@ -34,13 +34,17 @@ import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { refEqual } from "firebase/firestore";
+import { refEqual, serverTimestamp } from "firebase/firestore";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ElectAssignee from "./ElectAssignee";
+import ElectReporter from "./ElectReporter";
+import { useForm, Controller } from "react-hook-form";
+
+import FormControl from "@mui/material/FormControl";
 
 export default function EditTicket({ ticketData }) {
   // use router for post information
@@ -49,42 +53,55 @@ export default function EditTicket({ ticketData }) {
   const projectID = router.query.projectID;
 
   // Create generic firebase reference
+
+  const [open, setOpen] = useState(false);
+  const [assignee, setAssignee] = useState("");
+  const [reporter, setReporter] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    formState: { errors },
+    setValue,
+    reset,
+  } = useForm({
+    mode: "all",
+    defaultValues: {},
+  });
+
+  const statusOptions = [
+    { label: "Open", value: "Open" },
+    { label: "Closed", value: "Closed" },
+    { label: "Resolved", value: "Resolved" },
+  ];
+  const priorityOptions = [
+    { label: "High", value: "High" },
+    { label: "Medium", value: "Medium" },
+    { label: "Low", value: "Low" },
+  ];
+
   const ticketRef = firestore
     .collection("projects")
     .doc(projectID)
     .collection("tickets")
     .doc(ticketID);
 
-  const [open, setOpen] = useState(false);
-  const [priority, setPriority] = useState("");
-  const [assignee, setAssignee] = useState("");
-  const [description, setDescription] = useState("");
-  const [reporter, setReporter] = useState("");
-  const [status, setStatus] = useState("");
-  const [title, setTitle] = useState("");
-
-  const allStates = {
-    priority: priority,
-    assignee: assignee,
-    description: description,
-    reporter: reporter,
-    status: status,
-    title: title,
-  };
-  const changedStates = {};
-
   // post title state to firebase on click for save button
   const submitTicket = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
+    const data = e;
+    data.creationDate = serverTimeStamp();
+    data.lastUpdated = serverTimestamp();
+    const ref = firestore
+      .collection("projects")
+      .doc(projectID)
+      .collection("tickets")
+      .doc(ticketID);
     handleClose();
-    for (const [key, value] of Object.entries(allStates)) {
-      if (value !== "") {
-        changedStates[key] = value;
-      }
-    }
-    await ticketRef.update(changedStates);
+    await ref.update(data);
   };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -93,13 +110,10 @@ export default function EditTicket({ ticketData }) {
     setOpen(false);
   };
 
-  const changePriority = (event) => {
-    setPriority(event.target.value);
-  };
-
-  const changeStatus = (event) => {
-    setStatus(event.target.value);
-  };
+  useEffect(() => {
+    setValue("assignee", assignee);
+    setValue("reporter", reporter);
+  }, [assignee, reporter]);
 
   // Submits
 
@@ -111,70 +125,83 @@ export default function EditTicket({ ticketData }) {
             Edit
           </Button>
           <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Edit Ticket Details</DialogTitle>
-            <DialogContent>
-              {/* <DialogContentText></DialogContentText> */}
-              <TextField
-                margin="dense"
-                id="name"
-                label="Title"
-                fullWidth
-                variant="standard"
-                defaultValue={ticketData.title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <TextField
-                multiline
-                margin="dense"
-                id="name"
-                label="Description"
-                fullWidth
-                variant="standard"
-                defaultValue={ticketData.description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <TextField
-                margin="dense"
-                id="reporter"
-                label="Reporter"
-                fullWidth
-                variant="standard"
-                defaultValue={ticketData.reporter}
-                onChange={(e) => setReporter(e.target.value)}
-              />
-              <Stack>
+            <DialogTitle>Create New Ticket</DialogTitle>
+            <form>
+              <DialogContent>
+                <TextField
+                  margin="dense"
+                  id="name"
+                  label="Title"
+                  fullWidth
+                  variant="standard"
+                  defaultValue={ticketData.title}
+                  helperText={errors.title?.message}
+                  error={errors.title ? true : false}
+                  {...register("title", { required: "Title is required." })}
+                />
+                <TextField
+                  multiline
+                  margin="dense"
+                  id="name"
+                  label="Description"
+                  fullWidth
+                  variant="standard"
+                  defaultValue={ticketData.description}
+                  helperText={errors.description?.message}
+                  error={errors.description ? true : false}
+                  {...register("description", {
+                    required: "Description is required.",
+                  })}
+                />
+                <ElectReporter setReporter={setReporter} />
                 <ElectAssignee setAssignee={setAssignee} />
-
-                <InputLabel id="StatusLabel">Status</InputLabel>
-                <Select
-                  labelId="StatusLabel"
-                  id="editStatus"
-                  defaultValue={ticketData.status}
+                <TextField
+                  fullWidth
+                  select
+                  {...register("status", { required: "Status is required" })}
+                  onChange={(e) => setValue("status", e.target.value, true)}
                   label="Status"
-                  onChange={changeStatus}
+                  defaultValue={ticketData.status}
+                  helperText={errors.status?.message}
+                  error={errors.status ? true : false}
                 >
-                  <MenuItem value="Open">Open</MenuItem>
-                  <MenuItem value="Closed">Closed</MenuItem>
-                  <MenuItem value="Resolved">Resolved</MenuItem>
-                </Select>
-                <InputLabel id="PriorityLabel">Priority</InputLabel>
-                <Select
-                  labelId="PriorityLabel"
-                  id="editPriority"
-                  defaultValue={ticketData.priority}
+                  {statusOptions.map((status) => (
+                    <MenuItem key={status.value} value={status.value}>
+                      {status.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+
+                <TextField
+                  fullWidth
+                  select
+                  {...register("priority", {
+                    required: "Priority is required",
+                  })}
+                  onChange={(e) => setValue("priority", e.target.value, true)}
                   label="Priority"
-                  onChange={changePriority}
+                  defaultValue={ticketData.priority}
+                  helperText={errors.priority?.message}
+                  error={errors.priority ? true : false}
                 >
-                  <MenuItem value="Low">Low</MenuItem>
-                  <MenuItem value="Medium">Medium</MenuItem>
-                  <MenuItem value="High">High</MenuItem>
-                </Select>
-              </Stack>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={submitTicket}>Save</Button>
-            </DialogActions>
+                  {priorityOptions.map((priority) => (
+                    <MenuItem key={priority.value} value={priority.value}>
+                      {priority.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button
+                  onClick={handleSubmit((data) => {
+                    submitTicket(data);
+                  })}
+                >
+                  Save
+                </Button>
+              </DialogActions>
+            </form>
           </Dialog>
         </>
       ) : (

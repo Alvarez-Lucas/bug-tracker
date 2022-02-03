@@ -13,6 +13,19 @@ import {
 } from "../../lib/firebase";
 import Image from "next/image";
 import { GetUserID } from "../../lib/hooks";
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { typography } from "@mui/system";
 
 export async function getServerSideProps({ query }) {
   // const { username } = query;
@@ -28,18 +41,35 @@ export async function getServerSideProps({ query }) {
     props: { user },
   };
 }
+const style = {
+  width: "100%",
+  maxWidth: 360,
+  bgcolor: "background.paper",
+};
 
 function UserProfile({ user }) {
   return (
-    <div>
-      <h1>
-        {user.username.charAt(0).toUpperCase()}
-        {user.username.slice(1)}
-      </h1>
+    <Container>
+      <Stack direction="row" spacing={2}>
+        <Avatar src={user.photoURL} sx={{ width: 64, height: 64 }} />
+        <Stack>
+          <Typography variant="h4">{user.displayName}</Typography>
+          <typography variant="subtitle1">Software Engineer</typography>
+        </Stack>
+      </Stack>
+      <Divider />
+      <Typography variant="h6">Currently working on</Typography>
 
-      <img src={user.photoURL} />
-      <p>{user.displayName}</p>
-    </div>
+      <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        <List sx={style} component="nav">
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Testing" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
+    </Container>
   );
 }
 
