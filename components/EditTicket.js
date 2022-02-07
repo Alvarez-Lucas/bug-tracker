@@ -21,6 +21,8 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Grid3x3Sharp } from "@mui/icons-material";
 import List from "@mui/material/List";
@@ -46,22 +48,23 @@ import { useForm, Controller } from "react-hook-form";
 
 import FormControl from "@mui/material/FormControl";
 
-export default function EditTicket({ ticketData }) {
+export default function EditTicket({ ticketData, setTicketData }) {
   // use router for post information
   const router = useRouter();
   const ticketID = router.query.id;
   const projectID = router.query.projectID;
+  console.log("ticketData", ticketData);
 
   // Create generic firebase reference
 
   const [open, setOpen] = useState(false);
   const [assignee, setAssignee] = useState("");
   const [reporter, setReporter] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
-    watch,
     control,
     formState: { errors },
     setValue,
@@ -100,12 +103,17 @@ export default function EditTicket({ ticketData }) {
       .collection("tickets")
       .doc(ticketID);
     handleClose();
+    setTicketData(data);
     await ref.update(data);
+    setSnackOpen(true);
   };
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  const handleCloseSnack = () => {
+    setSnackOpen(false);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -119,96 +127,104 @@ export default function EditTicket({ ticketData }) {
 
   return (
     <>
-      {ticketData ? (
-        <>
-          <Button variant="outlined" onClick={handleClickOpen}>
-            Edit
-          </Button>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Create New Ticket</DialogTitle>
-            <form>
-              <DialogContent>
-                <TextField
-                  margin="dense"
-                  id="name"
-                  label="Title"
-                  fullWidth
-                  variant="standard"
-                  defaultValue={ticketData.title}
-                  helperText={errors.title?.message}
-                  error={errors.title ? true : false}
-                  {...register("title", { required: "Title is required." })}
-                />
-                <TextField
-                  multiline
-                  margin="dense"
-                  id="name"
-                  label="Description"
-                  fullWidth
-                  variant="standard"
-                  defaultValue={ticketData.description}
-                  helperText={errors.description?.message}
-                  error={errors.description ? true : false}
-                  {...register("description", {
-                    required: "Description is required.",
-                  })}
-                />
-                <ElectReporter setReporter={setReporter} />
-                <ElectAssignee setAssignee={setAssignee} />
-                <TextField
-                  fullWidth
-                  select
-                  {...register("status", { required: "Status is required" })}
-                  onChange={(e) => setValue("status", e.target.value, true)}
-                  label="Status"
-                  defaultValue={ticketData.status}
-                  helperText={errors.status?.message}
-                  error={errors.status ? true : false}
-                >
-                  {statusOptions.map((status) => (
-                    <MenuItem key={status.value} value={status.value}>
-                      {status.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnack}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Ticket has been updated.
+        </Alert>
+      </Snackbar>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Edit
+      </Button>
+      <Dialog fullWidth maxWidth="xl" open={open} onClose={handleClose}>
+        <DialogTitle>Create New Ticket</DialogTitle>
+        <form>
+          <DialogContent>
+            <TextField
+              margin="dense"
+              id="name"
+              label="Title"
+              variant="standard"
+              fullWidth
+              defaultValue={ticketData.title}
+              helperText={errors.title?.message}
+              error={errors.title ? true : false}
+              {...register("title", { required: "Title is required." })}
+            />
+            <TextField
+              multiline
+              margin="dense"
+              id="name"
+              label="Description"
+              variant="standard"
+              fullWidth
+              defaultValue={ticketData.description}
+              helperText={errors.description?.message}
+              error={errors.description ? true : false}
+              {...register("description", {
+                required: "Description is required.",
+              })}
+            />
+            <ElectReporter
+              reporter={ticketData.reporter}
+              setReporter={setReporter}
+            />
+            <ElectAssignee setAssignee={setAssignee} />
+            <TextField
+              select
+              {...register("status", { required: "Status is required" })}
+              onChange={(e) => setValue("status", e.target.value, true)}
+              label="Status"
+              defaultValue={ticketData.status}
+              helperText={errors.status?.message}
+              error={errors.status ? true : false}
+            >
+              {statusOptions.map((status) => (
+                <MenuItem key={status.value} value={status.value}>
+                  {status.label}
+                </MenuItem>
+              ))}
+            </TextField>
 
-                <TextField
-                  fullWidth
-                  select
-                  {...register("priority", {
-                    required: "Priority is required",
-                  })}
-                  onChange={(e) => setValue("priority", e.target.value, true)}
-                  label="Priority"
-                  defaultValue={ticketData.priority}
-                  helperText={errors.priority?.message}
-                  error={errors.priority ? true : false}
-                >
-                  {priorityOptions.map((priority) => (
-                    <MenuItem key={priority.value} value={priority.value}>
-                      {priority.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button
-                  onClick={handleSubmit((data) => {
-                    submitTicket(data);
-                  })}
-                >
-                  Save
-                </Button>
-              </DialogActions>
-            </form>
-          </Dialog>
-        </>
-      ) : (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-      )}
+            <TextField
+              select
+              {...register("priority", {
+                required: "Priority is required",
+              })}
+              onChange={(e) => setValue("priority", e.target.value, true)}
+              label="Priority"
+              defaultValue={ticketData.priority}
+              helperText={errors.priority?.message}
+              error={errors.priority ? true : false}
+            >
+              {priorityOptions.map((priority) => (
+                <MenuItem key={priority.value} value={priority.value}>
+                  {priority.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button
+              onClick={handleSubmit((data) => {
+                submitTicket(data);
+              })}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </>
   );
 }

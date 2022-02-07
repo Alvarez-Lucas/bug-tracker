@@ -15,6 +15,8 @@ import {
   Avatar,
   Typography,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 export default function CommentFeed({ commentData }) {
   return commentData
@@ -35,43 +37,45 @@ function CommentItem({ comment }) {
     //   <p>{comment.data.comment}</p>
     //   <p>by {userDoc && userDoc.username}</p>
     // </>
-    <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar>{userDoc && <img src={userDoc.photoURL} />}</Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            userDoc &&
-            comment.data.creationDate && (
+    <>
+      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar>{userDoc && <img src={userDoc.photoURL} />}</Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              userDoc &&
+              comment.data.creationDate && (
+                <>
+                  {userDoc.displayName}{" "}
+                  <Typography variant="body2" mt={0}>
+                    {
+                      comment.data.creationDate
+                        .toDate()
+                        .toString()
+                        .match(regex)[0]
+                    }
+                  </Typography>
+                </>
+              )
+            }
+            secondary={
               <>
-                {userDoc.displayName}{" "}
-                <Typography variant="body2" mt={0}>
-                  {
-                    comment.data.creationDate
-                      .toDate()
-                      .toString()
-                      .match(regex)[0]
-                  }
+                <Typography
+                  sx={{ display: "inline" }}
+                  component="span"
+                  variant="body1"
+                  color="text.primary"
+                >
+                  {comment.data.comment}
                 </Typography>
               </>
-            )
-          }
-          secondary={
-            <>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body1"
-                color="text.primary"
-              >
-                {comment.data.comment}
-              </Typography>
-            </>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </List>
+            }
+          />
+        </ListItem>
+        <Divider variant="inset" component="li" />
+      </List>
+    </>
   );
 }

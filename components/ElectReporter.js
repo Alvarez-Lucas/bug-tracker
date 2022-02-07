@@ -22,13 +22,15 @@ function UsernameQuery() {
   return users;
 }
 
-export default function ElectReporter({ setReporter }) {
+export default function ElectReporter({ reporter, setReporter }) {
   // const [assignee, setAssignee] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const loading = open && options.length === 0;
 
   const usernames = UsernameQuery();
+
+  let rep = usernames.find(({ uid }) => uid === reporter);
 
   React.useEffect(() => {
     let active = true;
@@ -56,42 +58,45 @@ export default function ElectReporter({ setReporter }) {
   }, [open]);
 
   return (
-    <Autocomplete
-      onChange={(event, value) =>
-        value ? setReporter(value.uid) : setReporter("")
-      }
-      id="asynchronous-demo"
-      // sx={{ width: 300 }}
-      open={open}
-      onOpen={() => {
-        setOpen(true);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
-      isOptionEqualToValue={(option, value) =>
-        option.username === value.username
-      }
-      getOptionLabel={(option) => option.username}
-      options={options}
-      loading={loading}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Reporter"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
+    <>
+      {rep && (
+        <Autocomplete
+          defaultValue={rep}
+          onChange={(event, value) =>
+            value ? setReporter(value.uid) : setReporter("")
+          }
+          open={open}
+          onOpen={() => {
+            setOpen(true);
           }}
+          onClose={() => {
+            setOpen(false);
+          }}
+          isOptionEqualToValue={(option, value) =>
+            option.username === value.username
+          }
+          getOptionLabel={(option) => option.username}
+          options={options}
+          loading={loading}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Reporter"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {loading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
         />
       )}
-    />
+    </>
   );
 }

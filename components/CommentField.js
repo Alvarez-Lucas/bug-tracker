@@ -39,7 +39,7 @@ export default function CommentField() {
 
   return (
     <form onSubmit={createComment}>
-      <h1>Comment</h1>
+      <h1>Comments</h1>
       <input value={comment} onChange={(e) => setComment(e.target.value)} />
       <Button variant="contained" endIcon={<SendIcon />} type="submit">
         Create New Comment

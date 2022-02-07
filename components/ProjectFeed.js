@@ -20,7 +20,7 @@ import { Box } from "@mui/system";
 export default function ProjectFeed({ projects }) {
   return projects
     ? projects.map((project) => (
-        <Grid item xs={12} lg={6} fullWidth key={project.id}>
+        <Grid item xs={12} lg={6} key={project.id}>
           <ProjectItem project={project} key={project.id} />
         </Grid>
       ))
@@ -29,7 +29,6 @@ export default function ProjectFeed({ projects }) {
 
 function ProjectItem({ project }) {
   const router = useRouter();
-  console.log("project.data", project.data);
 
   return (
     <Card>

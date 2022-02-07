@@ -10,13 +10,14 @@ import {
   useDocument,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
-import { Breadcrumbs, Container } from "@mui/material";
+import { Breadcrumbs, Container, Backdrop } from "@mui/material";
 import Link from "next/link";
 import { Typography } from "@mui/material";
 import TicketGarlicBread from "../../../../components/TicketGarlicBread";
 import { useContext, useEffect, useState } from "react";
 import { GetTicketDataAndUsername } from "../../../../lib/hooks";
 import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 // Firebase call for ticket data
 function TicketQuery(ref) {
   const [ticketData] = useDocumentData(ref);
@@ -91,19 +92,34 @@ const TicketDetails = () => {
   const projectName = ProjectNameQuery(projectID);
 
   return (
-    <Container maxWidth="xl">
-      <TicketGarlicBread
-        data={{ ticketData, projectName, projectID, ticketID }}
-      />
-      <TicketView
-        ticketData={ticketData}
-        assigneeUserData={assigneeUserData}
-        reporterUserData={reporterUserData}
-      />
-      <EditTicket ticketData={ticketData} />
-      <CommentField />
-      <CommentFeed commentData={commentData} />
-    </Container>
+    <>
+      {ticketData &&
+      projectName &&
+      assigneeUserData &&
+      reporterUserData &&
+      commentData ? (
+        <Container maxWidth="xl">
+          <TicketGarlicBread
+            data={{ ticketData, projectName, projectID, ticketID }}
+          />
+          <TicketView
+            ticketData={ticketData}
+            assigneeUserData={assigneeUserData}
+            reporterUserData={reporterUserData}
+          />
+          <EditTicket ticketData={ticketData} setTicketData={setTicketData} />
+          <CommentField />
+          <CommentFeed commentData={commentData} />
+        </Container>
+      ) : (
+        <Backdrop
+          open={true}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+    </>
   );
 };
 
