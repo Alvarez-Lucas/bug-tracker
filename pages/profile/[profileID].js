@@ -25,7 +25,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { typography } from "@mui/system";
 
 export async function getServerSideProps({ query }) {
   // const { username } = query;
@@ -54,7 +53,7 @@ function UserProfile({ user }) {
         <Avatar src={user.photoURL} sx={{ width: 64, height: 64 }} />
         <Stack>
           <Typography variant="h4">{user.displayName}</Typography>
-          <typography variant="subtitle1">Software Engineer</typography>
+          <Typography variant="subtitle1">Software Engineer</Typography>
         </Stack>
       </Stack>
       <Divider />

@@ -96,13 +96,13 @@ const projects = () => {
         <Typography variant="h3" align="center" gutterBottom={true}>
           Projects
         </Typography>
-        <Grid container spacing={2}>
+        <Box display="flex" flexDirection="column">
           {/* <Stack spacing={3}> */}
           <ProjectFeed projects={projectData} />
           {/* </Stack> */}
 
           <CreateNewProject />
-        </Grid>
+        </Box>
       </AuthCheck>
     </Container>
   );

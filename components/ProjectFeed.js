@@ -20,9 +20,20 @@ import { Box } from "@mui/system";
 export default function ProjectFeed({ projects }) {
   return projects
     ? projects.map((project) => (
-        <Grid item xs={12} lg={6} key={project.id}>
+        <Box
+          sx={{
+            display: "span",
+            // display: "inline-flex",
+            width: "100%",
+            // flexShrink: 0,
+            // flexGrow: 1,
+            alignItems: "center",
+            m: 1,
+          }}
+          key={project.id}
+        >
           <ProjectItem project={project} key={project.id} />
-        </Grid>
+        </Box>
       ))
     : null;
 }
