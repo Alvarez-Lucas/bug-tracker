@@ -100,6 +100,7 @@ export default function CreateTicket({ ticketData }) {
     const data = e;
     data.creationDate = serverTimeStamp();
     data.lastUpdated = serverTimestamp();
+    data.projectID = projectID;
     const ref = firestore
       .collection("projects")
       .doc(projectID)

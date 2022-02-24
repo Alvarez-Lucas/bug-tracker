@@ -53,7 +53,6 @@ export default function EditTicket({ ticketData, setTicketData }) {
   const router = useRouter();
   const ticketID = router.query.id;
   const projectID = router.query.projectID;
-  console.log("ticketData", ticketData);
 
   // Create generic firebase reference
 
