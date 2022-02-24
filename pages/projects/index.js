@@ -8,9 +8,19 @@ import { UserContext } from "../../lib/context";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import ProjectFeed from "../../components/ProjectFeed";
-import { Button, Card, CssBaseline, Stack, Box, Input } from "@mui/material";
+import {
+  Button,
+  Card,
+  CssBaseline,
+  Stack,
+  Box,
+  Input,
+  Typography,
+  Container,
+  Grid,
+} from "@mui/material";
 
-// Firebase call
+// Firebase call to Projects collection
 function ProjectQuery() {
   const projRef = firestore.collection("projects");
   const query = projRef.orderBy("creationDate");
@@ -23,6 +33,8 @@ function ProjectQuery() {
 
   return projects;
 }
+
+// Create New Project Button/Funcitonality
 function CreateNewProject() {
   const { user } = useContext(UserContext);
   const [pm, setPM] = useState("");
@@ -46,45 +58,53 @@ function CreateNewProject() {
   };
 
   return (
-    <form onSubmit={createProject}>
-      <Box
-        component="form"
-        sx={{
-          "& > :not(style)": { m: 1 },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        Title
-        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-        Description
-        <Input
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        Project Manager
-        <Input value={pm} onChange={(e) => setPM(e.target.value)} />
-        <Button variant="contained" type="submit">
-          Create New Post
-        </Button>
-      </Box>
-    </form>
+    // <form onSubmit={createProject}>
+    <Box
+      component="form"
+      sx={{
+        "& > :not(style)": { m: 1 },
+      }}
+      noValidate
+      autoComplete="off"
+      onSubmit={createProject}
+    >
+      Title
+      <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+      Description
+      <Input
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      Project Manager
+      <Input value={pm} onChange={(e) => setPM(e.target.value)} />
+      <Button variant="contained" type="submit">
+        Create New Post
+      </Button>
+    </Box>
+    // </form>
   );
 }
 
+// Project Page Layout
 const projects = () => {
   // query function, returns call list of projects
   const projectData = ProjectQuery();
 
   return (
-    <div>
+    <Container maxWidth="xl">
       <AuthCheck>
-        <Stack spacing={3}>
+        <Typography variant="h3" align="center" gutterBottom={true}>
+          Projects
+        </Typography>
+        <Box display="flex" flexDirection="column">
+          {/* <Stack spacing={3}> */}
           <ProjectFeed projects={projectData} />
-        </Stack>
-        <CreateNewProject />
+          {/* </Stack> */}
+
+          <CreateNewProject />
+        </Box>
       </AuthCheck>
-    </div>
+    </Container>
   );
 };
 

@@ -1,13 +1,39 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Button, Card, Stack, CssBaseline, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Stack,
+  CssBaseline,
+  Typography,
+  CardContent,
+  CardActionArea,
+  CardHeader,
+  CardMedia,
+  Grid,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import { query } from "firebase/firestore";
+import { Box } from "@mui/system";
 
 export default function ProjectFeed({ projects }) {
   return projects
     ? projects.map((project) => (
-        <ProjectItem project={project} key={project.id} />
+        <Box
+          sx={{
+            display: "span",
+            // display: "inline-flex",
+            width: "100%",
+            // flexShrink: 0,
+            // flexGrow: 1,
+            alignItems: "center",
+            m: 1,
+          }}
+          key={project.id}
+        >
+          <ProjectItem project={project} key={project.id} />
+        </Box>
       ))
     : null;
 }
@@ -15,20 +41,9 @@ export default function ProjectFeed({ projects }) {
 function ProjectItem({ project }) {
   const router = useRouter();
 
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
-
   return (
-    <Item>
-      <CssBaseline />
-      <Typography variant="h6">{project.data.title}</Typography>
-      <Button
-        variant="outlined"
-        type="button"
+    <Card>
+      <CardActionArea
         onClick={() => {
           router.push({
             pathname: "/projects/[id]/tickets",
@@ -36,8 +51,13 @@ function ProjectItem({ project }) {
           });
         }}
       >
-        View
-      </Button>
-    </Item>
+        <CardHeader title={project.data.title} />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            {project.data.description}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 }
